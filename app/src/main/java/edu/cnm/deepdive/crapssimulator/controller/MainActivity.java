@@ -1,4 +1,4 @@
-package edu.cnm.deepdive.crapssimulator;
+package edu.cnm.deepdive.crapssimulator.controller;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,13 +12,15 @@ import android.os.Bundle;
 import edu.cnm.deepdive.craps.model.Game;
 import edu.cnm.deepdive.craps.model.Game.Roll;
 import edu.cnm.deepdive.craps.model.Game.Round;
+import edu.cnm.deepdive.crapssimulator.R;
+import edu.cnm.deepdive.crapssimulator.view.RoundAdapter;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
   private Game game;
   private Random rng;
-  private ArrayAdapter<Roll> adapter;
+  private RoundAdapter adapter;
   private TextView tally;
   private ListView rolls;
 
@@ -27,13 +29,12 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     tally = findViewById(R.id.tally);
-    tally.setText("This will be my win/loss tally line");
     rolls = findViewById(R.id.rolls);
-    adapter = new ArrayAdapter<>(this, R.layout.single_roll);
+    adapter = new RoundAdapter(this);
     rolls.setAdapter(adapter);
     rng = new Random();
     resetGame();
-      }
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void updateDisplay(Round round) {
-    adapter.clear();
+    adapter.add(round);
     if (round != null) {
       adapter.addAll(round.getRolls());
     }
@@ -70,4 +71,5 @@ public class MainActivity extends AppCompatActivity {
     game = new Game(rng);
     updateDisplay(null);
   }
+
 }
